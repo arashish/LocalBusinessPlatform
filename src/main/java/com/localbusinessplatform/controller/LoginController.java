@@ -13,6 +13,6 @@ public class LoginController {
 	
 	@GetMapping("/ready")
 	public String ready() {
-		return "welcome";
+		return "welcome 21";
 	}
 }
