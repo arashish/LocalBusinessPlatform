@@ -10,9 +10,5 @@ public class LoginController {
 	public String login() {
 		return "login";
 	}
-	
-	@GetMapping("/ready")
-	public String ready() {
-		return "welcome 21";
-	}
+
 }
