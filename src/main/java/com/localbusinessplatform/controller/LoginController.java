@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.localbusinessplatform.impl.UserPrincipal;
 import com.localbusinessplatform.model.User;
 import com.localbusinessplatform.repository.UserRepository;
 
@@ -17,22 +18,24 @@ public class LoginController {
 	@Autowired
 	UserRepository repo;
 	
-	User user;
-	
 	@GetMapping("/")
 	public String home() {
-		return "home";
+		return "login";
 	}
 
 	@GetMapping("/login")
-	public String loginPage(@RequestParam String username) {
-		User user = repo.findByUsername(username);
-		return repo.findById(user.getId());
+	public String loginPage() {
+		return "login";
 	}
 	
 	@GetMapping("/signup")
 	public String signupPage() {
 		return "signup";
+	}
+	
+	@GetMapping("/home")
+	public String homePage() {
+		return "home";
 	}
 	
 	@PostMapping("/adduser")
@@ -44,7 +47,7 @@ public class LoginController {
 	
 	@GetMapping("/logout")
 	public String logoutPage() {
-		return "home";
+		return "login";
 	}
 
 }

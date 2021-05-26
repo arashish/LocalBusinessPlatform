@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +10,7 @@
 <h1>Welcome to LBP</h1>
 <br>
 <h1>Please Login</h1>
-	<form name"Login Page" action="login" method='POST'>
+	<form name="Login Page" action="login" method='POST'>
 		<table>
 			<tr>
 				<td>Username:</td>
@@ -24,6 +26,7 @@
 			</tr>
 		</table>
 	</form>
+	${SPRING_SECURITY_LAST_EXCEPTION.message}
 <h2>Don't have an account!</h2>	
 <h2><a href="/signup">Create an account</a></h2>
 </body>

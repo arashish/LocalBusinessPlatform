@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>Welcome to LBP</h1>
+<h1>Welcome to Local Business Platform</h1>
 <br>
 <h1>Please Login</h1>
 	<form name="sign Up Page" action="adduser" method='POST'>
