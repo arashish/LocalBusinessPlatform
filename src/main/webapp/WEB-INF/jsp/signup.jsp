@@ -7,9 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>Welcome to Local Business Platform</h1>
 <br>
-<h1>Please Login</h1>
+<h1>Signup Form</h1>
 	<form name="sign Up Page" action="adduser" method='POST'>
 		<table>
 			<tr>

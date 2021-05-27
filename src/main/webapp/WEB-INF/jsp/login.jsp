@@ -7,9 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>Welcome to LBP</h1>
+<h1>Local Business Platform</h1>
 <br>
-<h1>Please Login</h1>
+<h2>Please Login</h2>
 	<form name="Login Page" action="login" method='POST'>
 		<table>
 			<tr>
@@ -22,12 +22,22 @@
 			</tr>
 			<tr>
 				<td></td>
-				<td><button type="submit">Log In</button>
+				<td><button type="submit">Log In</button></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><small style="color:red">${SPRING_SECURITY_LAST_EXCEPTION.message}</small></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>Don't have an account!</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><a href="/signup">Create an account</a></td>
 			</tr>
 		</table>
 	</form>
-	${SPRING_SECURITY_LAST_EXCEPTION.message}
-<h2>Don't have an account!</h2>	
-<h2><a href="/signup">Create an account</a></h2>
+	
 </body>
 </html>
