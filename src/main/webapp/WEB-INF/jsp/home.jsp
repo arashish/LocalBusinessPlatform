@@ -5,6 +5,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>Welcome ${name} </h1>
+
+<div>
+  <a href="/home">Home</a>
+  <a href="/profile">Profile</a>
+  <a href="/logout">logout</a>
+</div>
+	
+<h1>Welcome ${name} </h1>
 </body>
 </html>
