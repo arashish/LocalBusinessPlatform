@@ -50,14 +50,21 @@ public class LoginController {
 	@PostMapping("/adduser")
 	public String addUser(User user) {
 		repo.save(user);
-		return "signup";
+		return "login";
 	}
 	
 	@GetMapping("/profile")
 	public String profile(Model model) {
 		UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Optional<User> user = repo.findById(principal.getUser().getId());
-		model.addAttribute("user", principal.getUser());
+		if(user.isPresent()) {
+		    User existingUser = user.get();
+		    model.addAttribute("user", existingUser);
+		    //existing user
+		} else {
+		    //there is no user the repo with the given 'id'
+		}
+		
 		return "profile";
 	}
 	

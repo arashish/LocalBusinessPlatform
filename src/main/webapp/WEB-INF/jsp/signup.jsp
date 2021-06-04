@@ -1,39 +1,33 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
 <title>Insert title here</title>
 </head>
 <body>
 <br>
 <h1>Signup Form</h1>
-	<form name="sign Up Page" action="adduser" method='POST'>
+	<form name="sign Up Page" action="updateuser" method='POST'>
 		<table>
 			<tr>
 				<td>First Name:</td>
-				<td><input type="text" id="firstname" name="firstname">
+				<td><input type="text" id="firstname" name="firstname"></td>
 			</tr>
 			<tr>
 				<td>Last Name:</td>
-				<td><input type="text" id="lastname" name="lastname">
+				<td><input type="text" id="lastname" name="lastname"></td>
 			</tr>
 			<tr>
 				<td>Mobile Number:</td>
-				<td><input type="text" id="phone" name="phone">
+				<td><input type="text" id="phone" name="phone"></td>
 			</tr>
 			<tr>
 				<td>Username:</td>
-				<td><input type="text" id="username" name="username">
+				<td><input type="text" id="username" name="username"></td>
 			</tr>
 			<tr>
 				<td>Password:</td>
-				<td><input type="password" id="password" name="password">
+				<td><input type="password" id="password" name="password"></td>
 			</tr>
 			<tr>
 				<td></td>
-				<td><button type="submit">Sign Up</button>
+				<td><input type ="submit" value="Submit" /></td>
 			</tr>
 		</table>
 	</form>
