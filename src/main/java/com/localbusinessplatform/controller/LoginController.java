@@ -1,6 +1,8 @@
 package com.localbusinessplatform.controller;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,10 @@ public class LoginController {
 
 	@PostMapping("/adduser")
 	public String addUser(User user) {
+		user.setActive(false); //default
+		LocalDate localDate = LocalDate.now();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		user.setRegistrationdate(dtf.format(localDate));
 		repo.save(user);
 		return "login";
 	}

@@ -25,14 +25,17 @@
 				<td>Last Name:</td>
 				<td><input type="text" id="lastname" name="lastname" value="${user.lastname}">
 			</tr>
-			<tr>
-				<td>Mobile Number:</td>
-				<td><input type="text" id="phone" name="phone" value="${user.phone}">
-			</tr>
+			
 			<tr>
 				<td>Password:</td>
 				<td><input type="password" id="password" name="password" value="${user.password}">
 			</tr>
+			
+			<tr>
+				<td>User Type:</td>
+				<td><input type="text" id="phone" name="phone" value="${user.phone}">
+			</tr>
+			
 			<tr>
 				<td></td>
 				<td><button name="Save changes" type="submit">Save Changes</button>

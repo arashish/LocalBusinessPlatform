@@ -13,7 +13,7 @@
 	<form name="Login Page" action="login" method='POST'>
 		<table>
 			<tr>
-				<td>Username:</td>
+				<td>Email:</td>
 				<td><input type="text" id="username" name="username" required>
 			</tr>
 			<tr>
