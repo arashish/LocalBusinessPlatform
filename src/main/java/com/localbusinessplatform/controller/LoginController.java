@@ -1,90 +1,46 @@
 package com.localbusinessplatform.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.localbusinessplatform.impl.UserPrincipal;
+
 import com.localbusinessplatform.model.User;
 import com.localbusinessplatform.repository.UserRepository;
-import com.localbusinessplatform.service.MyUserDetailsService;
 
-@Controller
+@RestController
 public class LoginController {
 
 	@Autowired
 	UserRepository repo;
-
-	MyUserDetailsService userdetails;
-
-	@GetMapping({ "/", "/login" })
-	public String home(Principal principal) {
-		 if (principal!=null && ((Authentication)principal).isAuthenticated()) 
-		 	{
-		        return "forward:/home"; //redirects to home page if already logged in
-		    }
-		return "login";
-	}
-
-	@GetMapping("/signup")
-	public String signupPage() {
-		return "signup";
-	}
-
-	@GetMapping("/home")
-	public String homePage(Model model) {
-		UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		model.addAttribute("name", principal.getUser().getFirstname() + " " + principal.getUser().getLastname());
-		return "home";
-	}
-
-	@PostMapping("/adduser")
-	public String addUser(User user) {
-		user.setActive(false); //default
-		LocalDate localDate = LocalDate.now();
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-		user.setRegistrationdate(dtf.format(localDate));
-		repo.save(user);
-		return "login";
+	
+	@CrossOrigin
+	@GetMapping(value ={"/"}, produces = MediaType.APPLICATION_JSON_VALUE)
+	public User home() {
+		User user = new User();
+		user.setFirstname("Ace");
+		user.setLastname("Rajak");
+		return user;
 	}
 	
-	@GetMapping("/profile")
-	public String profile(Model model) {
-		UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Optional<User> user = repo.findById(principal.getUser().getId());
-		if(user.isPresent()) {
-		    User existingUser = user.get();
-		    model.addAttribute("user", existingUser);
-		    //existing user
-		} else {
-		    //there is no user the repo with the given 'id'
-		}
-		
-		return "profile";
-	}
-	
-
-	@PostMapping("/updateuser")
-	public String updateUser(User user) {
-		repo.save(user);
-		return "home";
+	@CrossOrigin
+	@GetMapping(value ={"/login"}, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String login() {
+		return "Welcome";
 	}
 	
 	
-	@GetMapping("/logout")
-	public String logoutPage() {
-		return "login";
-	}
 
 }

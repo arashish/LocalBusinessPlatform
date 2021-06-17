@@ -1,3 +1,4 @@
+
 package com.localbusinessplatform.impl;
 
 import java.util.Collection;
@@ -11,10 +12,8 @@ import com.localbusinessplatform.model.User;
 
 public class UserPrincipal implements UserDetails {
 
-	
 	private User user;
-	
-	
+
 	public UserPrincipal(User user) {
 		super();
 		this.user = user;
@@ -26,38 +25,27 @@ public class UserPrincipal implements UserDetails {
 	}
 
 	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
+	public String getPassword() { // TODO Auto-generated method stub
 		return user.getPassword();
 	}
 
 	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
+	public String getUsername() { // TODO Auto-generated method stub
 		return user.getUsername();
 	}
 
-	@Override
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+	@Override public boolean isAccountNonExpired() { // TODO Auto-generated
+		return true; 
+		}
+
+	@Override public boolean isAccountNonLocked() { // TODO Auto-generated method
+		return true; }
+
+	@Override public boolean isCredentialsNonExpired() { // TODO Auto-generated
+		return true; }
 
 	@Override
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
+	public boolean isEnabled() { // TODO Auto-generated method stub
 		return true;
 	}
 
@@ -68,7 +56,5 @@ public class UserPrincipal implements UserDetails {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
 
 }
