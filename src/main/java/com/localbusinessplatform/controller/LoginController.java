@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.localbusinessplatform.impl.UserPrincipal;
 import com.localbusinessplatform.model.User;
 import com.localbusinessplatform.repository.UserRepository;
 
@@ -29,9 +30,8 @@ public class LoginController {
 	@CrossOrigin
 	@GetMapping(value ={"/"}, produces = MediaType.APPLICATION_JSON_VALUE)
 	public User home() {
-		User user = new User();
-		user.setFirstname("Ace");
-		user.setLastname("Rajak");
+		UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = principal.getUser();
 		return user;
 	}
 	
