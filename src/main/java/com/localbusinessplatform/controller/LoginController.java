@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,48 +24,56 @@ import com.localbusinessplatform.constant.LBPConstants;
 import com.localbusinessplatform.impl.UserPrincipal;
 import com.localbusinessplatform.model.User;
 import com.localbusinessplatform.repository.UserRepository;
+import com.localbusinessplatform.util.JwtUtil;
 
 @RestController
 public class LoginController {
 
 	@Autowired
 	UserRepository repo;
+
+	@Autowired
+	JwtUtil jwtUtil;
 	
 	@CrossOrigin
-	@GetMapping(value ={"/"}, produces = MediaType.APPLICATION_JSON_VALUE)
-	public User home() {
+	@GetMapping(value = { "/" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String home() {
+		UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = principal.getUser();
+		System.out.println(jwtUtil.generateToken(user.getUsername()));
+		return jwtUtil.generateToken(user.getUsername());
+	}
+	 
+
+	@CrossOrigin
+	@GetMapping(value = { "/home" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public User login() {
 		UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = principal.getUser();
 		return user;
 	}
-	
+
 	@CrossOrigin
-	@GetMapping(value ={"/login"}, produces = MediaType.APPLICATION_JSON_VALUE)
-	public String login() {
-		return "Welcome";
-	}
-	
-	@CrossOrigin
-	@PostMapping(value ={"/signup"}, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = { "/signup" }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public String addUser(@RequestBody User user) throws Exception {
-		user.setActive(false); //default
+		user.setActive(false); // default
 		LocalDate localDate = LocalDate.now();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 		user.setRegistrationdate(dtf.format(localDate));
 		repo.save(user);
 		return LBPConstants.Status_OK;
 	}
-	
+
 	@CrossOrigin
-	@PostMapping(value ="/updateprofile", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/updateprofile", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String profile(@RequestBody User user) throws Exception {
 		Optional<User> finduser = repo.findById(user.getId());
-		if(finduser.isPresent()) {
-		    User existingUser = finduser.get();
-		    repo.save(user);
-		    //existing user
+		if (finduser.isPresent()) {
+			User existingUser = finduser.get();
+			repo.save(user);
+			// existing user
 		} else {
-		    //there is no user the repo with the given 'id'
+			// there is no user the repo with the given 'id'
 		}
 		return LBPConstants.Status_OK;
 	}
