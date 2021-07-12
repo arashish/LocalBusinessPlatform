@@ -26,6 +26,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.localbusinessplatform.filter.JwtFilter;
 
@@ -59,9 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.httpBasic()
 		.and().exceptionHandling().and().sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-		;
 	
+		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	/*
@@ -83,5 +83,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * "isu2021").roles("USER").build()); return new
 	 * InMemoryUserDetailsManager(users); }
 	 */
-
+	
 }

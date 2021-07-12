@@ -20,6 +20,7 @@ public class User {
 	private String usertype;
 	private boolean active;
 	private String registrationdate;
+	private String phone;
 	
 	public long getId() {
 		return id;
@@ -68,6 +69,14 @@ public class User {
 	}
 	public void setRegistrationdate(String registrationdate) {
 		this.registrationdate = registrationdate;
+	}
+	
+	public String getPhone() {
+		return phone;
+	}
+	
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 	
 	
