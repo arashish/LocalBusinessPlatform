@@ -31,7 +31,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.localbusinessplatform.constant.LBPConstants;
 import com.localbusinessplatform.impl.UserPrincipal;
+import com.localbusinessplatform.model.Store;
 import com.localbusinessplatform.model.User;
+import com.localbusinessplatform.repository.StoreRepository;
 import com.localbusinessplatform.repository.UserRepository;
 import com.localbusinessplatform.util.JwtUtil;
 
@@ -39,8 +41,12 @@ import com.localbusinessplatform.util.JwtUtil;
 public class LoginController {
 
 	@Autowired
-	UserRepository repo;
-
+	UserRepository userRepository;
+	
+	@Autowired
+	StoreRepository storeRepository;
+	
+	
 	@Autowired
 	JwtUtil jwtUtil;
 	
@@ -69,17 +75,17 @@ public class LoginController {
 		LocalDate localDate = LocalDate.now();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 		user.setRegistrationdate(dtf.format(localDate));
-		repo.save(user);
+		userRepository.save(user);
 		return LBPConstants.Status_OK;
 	}
 
 	@CrossOrigin
 	@PostMapping(value = "/updateprofile", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String profile(@RequestBody User user) throws Exception {
-		Optional<User> finduser = repo.findById(user.getId());
+		Optional<User> finduser = userRepository.findById(user.getId());
 		if (finduser.isPresent()) {
 			User existingUser = finduser.get();
-			repo.save(user);
+			userRepository.save(user);
 			// existing user
 		} else {
 			// there is no user the repo with the given 'id'
@@ -96,5 +102,19 @@ public class LoginController {
         }  
 		return LBPConstants.Status_OK;
 	}
+	
+	@CrossOrigin
+	@PostMapping(value = { "/createstore" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String createStore(@RequestBody Store store) throws Exception {
+		store.setPublish(false); // default
+		LocalDate localDate = LocalDate.now();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		store.setRegistration_date(dtf.format(localDate));
+		storeRepository.save(store);
+		return LBPConstants.Status_OK;
+	}
+	
+	
+	
 	
 }
