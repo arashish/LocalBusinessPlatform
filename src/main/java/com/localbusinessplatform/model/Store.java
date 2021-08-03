@@ -1,5 +1,6 @@
 package com.localbusinessplatform.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +21,9 @@ public class Store {
 	private String zipcode;
 	private boolean publish;
 	private String registration_date;
+	
+	@Column(name="user_id")
+	private long userId;
 	
 	public long getStore_id() {
 		return store_id;
@@ -81,5 +85,12 @@ public class Store {
 	public void setRegistration_date(String registration_date) {
 		this.registration_date = registration_date;
 	}
-		
+	public long getUserId() {
+		return userId;
+	}
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
+	
 }

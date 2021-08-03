@@ -1,10 +1,12 @@
 package com.localbusinessplatform.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.zip.Deflater;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -26,15 +28,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.localbusinessplatform.constant.LBPConstants;
 import com.localbusinessplatform.impl.UserPrincipal;
+import com.localbusinessplatform.model.Image;
+import com.localbusinessplatform.model.Item;
+import com.localbusinessplatform.model.ItemWrapper;
 import com.localbusinessplatform.model.Store;
 import com.localbusinessplatform.model.User;
+import com.localbusinessplatform.repository.ItemRepository;
 import com.localbusinessplatform.repository.StoreRepository;
 import com.localbusinessplatform.repository.UserRepository;
+import com.localbusinessplatform.response.UserData;
 import com.localbusinessplatform.util.JwtUtil;
 
 @RestController
@@ -46,9 +57,14 @@ public class LoginController {
 	@Autowired
 	StoreRepository storeRepository;
 	
+	@Autowired
+	ItemRepository itemRepository;
 	
 	@Autowired
 	JwtUtil jwtUtil;
+	
+	@Autowired
+	UserData userData;
 	
 	@CrossOrigin
 	@GetMapping(value = { "/" }, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -62,10 +78,20 @@ public class LoginController {
 
 	@CrossOrigin
 	@GetMapping(value = { "/home" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public User login() {
+	public UserData login() {
 		UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = principal.getUser();
-		return user;
+		Store findstore = storeRepository.findByUserId(user.getId());
+		
+		if (user != null) {
+			userData.setUser(user);
+		}
+		
+		if (findstore != null) {
+			userData.setStore(findstore);
+		}
+		
+		return userData;
 	}
 
 	@CrossOrigin
@@ -114,6 +140,47 @@ public class LoginController {
 		return LBPConstants.Status_OK;
 	}
 	
+	
+	@CrossOrigin
+	@PostMapping(value = { "/additem" },consumes = { "application/json", "multipart/form-data" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String addItem(@RequestPart("imageFile") MultipartFile file, @RequestPart("itemWrapper") ItemWrapper itemWrapper) throws Exception { //@RequestPart("imageFile") MultipartFile file
+		Item item = new Item();
+		item.setItemName(itemWrapper.getItemName());
+		item.setDescription(itemWrapper.getDescription());
+		item.setCategory(itemWrapper.getCategory());
+		item.setInventoryQty(itemWrapper.getInventoryQty());
+		item.setPrice(itemWrapper.getPrice());
+		item.setItemImage(compressFile(file.getBytes()));
+		item.setStoreId(itemWrapper.getStoreId());
+		itemRepository.save(item);
+//		store.setPublish(false); // default
+//		LocalDate localDate = LocalDate.now();
+//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+//		store.setRegistration_date(dtf.format(localDate));
+//		itemRepository.save(item);
+	    //Image img = new Image(file.getOriginalFilename(), file.getContentType(), compressBytes(file.getBytes()));
+		//item.setItemImage(null);
+	    return LBPConstants.Status_OK;
+	}
+	
+    // compress the image bytes before storing it in the database
+    public byte[] compressFile(byte[] image) {
+        Deflater compress = new Deflater();
+        compress.setInput(image);
+        compress.finish();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(image.length);
+        byte[] bufferSize = new byte[1024];
+        while (!compress.finished()) {
+            int ct = compress.deflate(bufferSize);
+            byteArrayOutputStream.write(bufferSize, 0, ct);
+        }
+        try {
+        	byteArrayOutputStream.close();
+        } catch (IOException e) {
+        }
+        return byteArrayOutputStream.toByteArray();
+
+    }
 	
 	
 	
