@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.zip.Deflater;
 
@@ -81,15 +82,21 @@ public class LoginController {
 	public UserData login() {
 		UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = principal.getUser();
-		Store findstore = storeRepository.findByUserId(user.getId());
+		Store findStore = storeRepository.findByUserId(user.getId());
+		List<Item> findItem = itemRepository.findByStoreId(findStore.getStore_id());
 		
 		if (user != null) {
 			userData.setUser(user);
 		}
 		
-		if (findstore != null) {
-			userData.setStore(findstore);
+		if (findStore != null) {
+			userData.setStore(findStore);
 		}
+		
+		if (findItem != null) {
+			userData.setItem(findItem);
+		}
+		
 		
 		return userData;
 	}
@@ -143,25 +150,29 @@ public class LoginController {
 	
 	@CrossOrigin
 	@PostMapping(value = { "/additem" },consumes = { "application/json", "multipart/form-data" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public String addItem(@RequestPart("imageFile") MultipartFile file, @RequestPart("itemWrapper") ItemWrapper itemWrapper) throws Exception { //@RequestPart("imageFile") MultipartFile file
+	public Item addItem(@RequestPart("imageFile") MultipartFile file, @RequestPart("itemWrapper") ItemWrapper itemWrapper) throws Exception { //@RequestPart("imageFile") MultipartFile file
 		Item item = new Item();
 		item.setItemName(itemWrapper.getItemName());
 		item.setDescription(itemWrapper.getDescription());
 		item.setCategory(itemWrapper.getCategory());
 		item.setInventoryQty(itemWrapper.getInventoryQty());
 		item.setPrice(itemWrapper.getPrice());
-		item.setItemImage(compressFile(file.getBytes()));
+		item.setItemImage(file.getBytes());
 		item.setStoreId(itemWrapper.getStoreId());
 		itemRepository.save(item);
-//		store.setPublish(false); // default
-//		LocalDate localDate = LocalDate.now();
-//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-//		store.setRegistration_date(dtf.format(localDate));
-//		itemRepository.save(item);
+		
 	    //Image img = new Image(file.getOriginalFilename(), file.getContentType(), compressBytes(file.getBytes()));
 		//item.setItemImage(null);
-	    return LBPConstants.Status_OK;
-	}
+		
+		Item findItem = itemRepository.findByItemId(item.getItemId());
+		
+		if (findItem != null) {
+			return findItem;
+		}
+		
+		return null;
+		
+}
 	
     // compress the image bytes before storing it in the database
     public byte[] compressFile(byte[] image) {

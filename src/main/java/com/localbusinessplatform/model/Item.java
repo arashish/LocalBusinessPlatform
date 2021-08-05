@@ -11,7 +11,7 @@ public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="item_id")
-    private String itemId;
+    private long itemId;
 	
 	@Column(name="item_name")
 	private String itemName;
@@ -28,13 +28,13 @@ public class Item {
     private byte[] itemImage;
     
 	@Column(name="store_id")
-	private String storeId;
+	private long storeId;
 
-	public String getItemId() {
+	public long getItemId() {
 		return itemId;
 	}
 
-	public void setItemId(String itemId) {
+	public void setItemId(long itemId) {
 		this.itemId = itemId;
 	}
 
@@ -78,14 +78,6 @@ public class Item {
 		this.price = price;
 	}
 
-	public String getStoreId() {
-		return storeId;
-	}
-
-	public void setStoreId(String storeId) {
-		this.storeId = storeId;
-	}
-
 	public byte[] getItemImage() {
 		return itemImage;
 	}
@@ -94,6 +86,12 @@ public class Item {
 		this.itemImage = itemImage;
 	}
 
-   
-    
+	public long getStoreId() {
+		return storeId;
+	}
+
+	public void setStoreId(long storeId) {
+		this.storeId = storeId;
+	}
+
 }

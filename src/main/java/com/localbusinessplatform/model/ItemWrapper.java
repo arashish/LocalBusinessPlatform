@@ -13,18 +13,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ItemWrapper {
 
-    private String itemId;
+    private long itemId;
 	private String itemName;
 	private String description;
 	private String category;
 	private String inventoryQty;
 	private String price;
- 	private String storeId;
-	
-	public String getItemId() {
+ 	private long storeId;
+ 	
+	public long getItemId() {
 		return itemId;
 	}
-	public void setItemId(String itemId) {
+	public void setItemId(long itemId) {
 		this.itemId = itemId;
 	}
 	public String getItemName() {
@@ -57,11 +57,13 @@ public class ItemWrapper {
 	public void setPrice(String price) {
 		this.price = price;
 	}
-	public String getStoreId() {
+	public long getStoreId() {
 		return storeId;
 	}
-	public void setStoreId(String storeId) {
+	public void setStoreId(long storeId) {
 		this.storeId = storeId;
 	}
+	
+
 
 }

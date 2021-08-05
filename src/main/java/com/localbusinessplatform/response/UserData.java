@@ -1,8 +1,11 @@
 package com.localbusinessplatform.response;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.localbusinessplatform.model.Item;
 import com.localbusinessplatform.model.Store;
 import com.localbusinessplatform.model.User;
 
@@ -11,6 +14,8 @@ public class UserData {
 	
 	User user;
 	Store store;
+	
+	List<Item> item;
 
 	public User getUser() {
 		return user;
@@ -27,5 +32,14 @@ public class UserData {
 	public void setStore(Store store) {
 		this.store = store;
 	}
-	
+
+	public List<Item> getItem() {
+		return item;
+	}
+
+	public void setItem(List<Item> item) {
+		this.item = item;
+	}
+
+
 }
