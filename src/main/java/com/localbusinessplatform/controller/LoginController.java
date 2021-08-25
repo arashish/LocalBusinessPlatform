@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.zip.Deflater;
@@ -22,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,7 +40,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.localbusinessplatform.constant.LBPConstants;
 import com.localbusinessplatform.impl.UserPrincipal;
-import com.localbusinessplatform.model.Image;
 import com.localbusinessplatform.model.Item;
 import com.localbusinessplatform.model.ItemWrapper;
 import com.localbusinessplatform.model.Store;
@@ -48,6 +49,7 @@ import com.localbusinessplatform.repository.StoreRepository;
 import com.localbusinessplatform.repository.UserRepository;
 import com.localbusinessplatform.response.UserData;
 import com.localbusinessplatform.util.JwtUtil;
+import com.mysql.jdbc.Constants;
 
 @RestController
 public class LoginController {
@@ -83,8 +85,12 @@ public class LoginController {
 		UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = principal.getUser();
 		Store findStore = storeRepository.findByUserId(user.getId());
-		List<Item> findItem = itemRepository.findByStoreId(findStore.getStore_id());
+		List<Item> findItem = new ArrayList();
+		if (findStore != null) {
+			findItem = itemRepository.findByStoreId(findStore.getStoreId());
+		}
 		
+		userData = new UserData();
 		if (user != null) {
 			userData.setUser(user);
 		}
@@ -142,7 +148,7 @@ public class LoginController {
 		store.setPublish(false); // default
 		LocalDate localDate = LocalDate.now();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-		store.setRegistration_date(dtf.format(localDate));
+		store.setRegistrationDate(dtf.format(localDate));
 		storeRepository.save(store);
 		return LBPConstants.Status_OK;
 	}
@@ -151,6 +157,40 @@ public class LoginController {
 	@CrossOrigin
 	@PostMapping(value = { "/additem" },consumes = { "application/json", "multipart/form-data" }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Item addItem(@RequestPart("imageFile") MultipartFile file, @RequestPart("itemWrapper") ItemWrapper itemWrapper) throws Exception { //@RequestPart("imageFile") MultipartFile file
+		Item item = new Item();
+		item.setItemId(itemWrapper.getItemId());
+		item.setItemName(itemWrapper.getItemName());
+		item.setDescription(itemWrapper.getDescription());
+		item.setCategory(itemWrapper.getCategory());
+		item.setInventoryQty(itemWrapper.getInventoryQty());
+		item.setPrice(itemWrapper.getPrice());
+		item.setItemImage(file.getBytes());
+		item.setStoreId(itemWrapper.getStoreId());
+		itemRepository.save(item);
+		
+	    //Image img = new Image(file.getOriginalFilename(), file.getContentType(), compressBytes(file.getBytes()));
+		//item.setItemImage(null);
+		
+		Item findItem = itemRepository.findByItemId(item.getItemId());
+		
+		if (findItem != null) {
+			return findItem;
+		}
+		
+		return null;
+	}
+	
+	@CrossOrigin
+	@DeleteMapping(value = {"/deleteitem/{itemId}"}, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String deleteItem(@PathVariable(value = "itemId") int itemId) throws Exception {
+		itemRepository.deleteByItemId(itemId);
+		return LBPConstants.Status_OK;
+	}
+	
+	
+	@CrossOrigin
+	@PostMapping(value = { "/update" },consumes = { "application/json", "multipart/form-data" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Item updateItem(@RequestPart("imageFile") MultipartFile file, @RequestPart("itemWrapper") ItemWrapper itemWrapper) throws Exception { //@RequestPart("imageFile") MultipartFile file
 		Item item = new Item();
 		item.setItemName(itemWrapper.getItemName());
 		item.setDescription(itemWrapper.getDescription());
