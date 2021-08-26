@@ -187,6 +187,13 @@ public class LoginController {
 		return LBPConstants.Status_OK;
 	}
 	
+	@CrossOrigin
+	@DeleteMapping(value = {"/deletestore/{storeId}"}, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String deleteStore(@PathVariable(value = "storeId") int storeId) throws Exception {
+		storeRepository.deleteByStoreId(storeId);
+		return LBPConstants.Status_OK;
+	}
+	
 	
 	@CrossOrigin
 	@PostMapping(value = { "/update" },consumes = { "application/json", "multipart/form-data" }, produces = MediaType.APPLICATION_JSON_VALUE)
