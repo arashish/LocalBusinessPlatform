@@ -14,6 +14,8 @@ public interface ItemRepository extends JpaRepository<Item, Long>{
 	
 	Item findByItemId(long item_id);
 	
+	List<Item> findByItemNameAndCategory(String itemName, String category);
+	
 	@Transactional
 	public void deleteByItemId(long item_id);
 	

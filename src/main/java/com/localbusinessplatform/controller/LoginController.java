@@ -207,19 +207,22 @@ public class LoginController {
 		item.setItemImage(file.getBytes());
 		item.setStoreId(itemWrapper.getStoreId());
 		itemRepository.save(item);
-		
 	    //Image img = new Image(file.getOriginalFilename(), file.getContentType(), compressBytes(file.getBytes()));
 		//item.setItemImage(null);
-		
 		Item findItem = itemRepository.findByItemId(item.getItemId());
-		
 		if (findItem != null) {
 			return findItem;
 		}
-		
 		return null;
-		
-}
+	}
+	
+	@CrossOrigin
+	@GetMapping(value = { "/searchitem" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Item> searchItem( @RequestParam(value = "itemName") String itemName,  @RequestParam(value = "category") String category) {
+		List<Item> findItem = new ArrayList();
+		findItem = itemRepository.findByItemNameAndCategory(itemName, category);
+		return findItem;
+	}
 	
     // compress the image bytes before storing it in the database
     public byte[] compressFile(byte[] image) {
