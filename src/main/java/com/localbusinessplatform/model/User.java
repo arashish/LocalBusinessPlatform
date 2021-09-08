@@ -21,7 +21,43 @@ public class User {
 	private boolean active;
 	private String registrationdate;
 	private String phone;
-	
+	private String address;
+	private String city;
+	private String state;
+	private String country;
+	private String rating;
+	private String searchdistance;
+		
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	public String getRating() {
+		return rating;
+	}
+	public void setRating(String rating) {
+		this.rating = rating;
+	}
 	public long getId() {
 		return id;
 	}
@@ -77,6 +113,12 @@ public class User {
 	
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	public String getSearchdistance() {
+		return searchdistance;
+	}
+	public void setSearchdistance(String searchdistance) {
+		this.searchdistance = searchdistance;
 	}
 	
 	

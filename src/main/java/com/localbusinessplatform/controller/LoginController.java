@@ -220,7 +220,11 @@ public class LoginController {
 	@GetMapping(value = { "/searchitem" }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Item> searchItem( @RequestParam(value = "itemName") String itemName,  @RequestParam(value = "category") String category) {
 		List<Item> findItem = new ArrayList();
-		findItem = itemRepository.findByItemNameAndCategory(itemName, category);
+		if (category.equals("")) {
+			findItem = itemRepository.findByItemName(itemName);
+		} else {
+			findItem = itemRepository.findByItemNameAndCategory(itemName, category);
+		}
 		return findItem;
 	}
 	
