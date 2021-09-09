@@ -21,6 +21,7 @@ public class Store {
 	private String city;
 	private String state;
 	private String zipcode;
+	private String country;
 	private boolean publish;
 	@Column(name="registration_date")
 	private String registrationDate;
@@ -113,6 +114,14 @@ public class Store {
 
 	public void setUserId(long userId) {
 		this.userId = userId;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 	
 }

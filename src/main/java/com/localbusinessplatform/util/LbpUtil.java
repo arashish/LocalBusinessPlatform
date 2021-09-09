@@ -22,7 +22,7 @@ public class LbpUtil {
 			ObjectMapper mapper = new ObjectMapper();
 			GoogleResponse googleResponse = mapper.readValue(response.body().string(), GoogleResponse .class);
 			
-			return googleResponse.getRows().get(0).getElements().get(0).getDistance().getText();
+			return googleResponse.getRows().get(0).getElements().get(0).getDistance().getText().replaceAll(" mi", "");
 	}
 	
 }

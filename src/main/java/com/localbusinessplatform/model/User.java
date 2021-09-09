@@ -24,6 +24,7 @@ public class User {
 	private String address;
 	private String city;
 	private String state;
+	private String zipcode;
 	private String country;
 	private String rating;
 	private String searchdistance;
@@ -120,6 +121,11 @@ public class User {
 	public void setSearchdistance(String searchdistance) {
 		this.searchdistance = searchdistance;
 	}
-	
+	public String getZipcode() {
+		return zipcode;
+	}
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
 	
 }

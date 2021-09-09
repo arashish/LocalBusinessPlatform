@@ -11,6 +11,8 @@ public interface StoreRepository extends JpaRepository<Store, Long>{
 
 	Store findByUserId(long user_id);
 	
+	Store findByStoreId(long store_id);
+	
 	@Transactional
 	public void deleteByStoreId(long store_id);
 }

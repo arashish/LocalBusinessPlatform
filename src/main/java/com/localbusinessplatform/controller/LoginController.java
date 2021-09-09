@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.localbusinessplatform.constant.LBPConstants;
+import com.localbusinessplatform.google.GoogleResponse;
 import com.localbusinessplatform.impl.UserPrincipal;
 import com.localbusinessplatform.model.Item;
 import com.localbusinessplatform.model.ItemWrapper;
@@ -49,6 +50,7 @@ import com.localbusinessplatform.repository.StoreRepository;
 import com.localbusinessplatform.repository.UserRepository;
 import com.localbusinessplatform.response.UserData;
 import com.localbusinessplatform.util.JwtUtil;
+import com.localbusinessplatform.util.LbpUtil;
 import com.mysql.jdbc.Constants;
 
 @RestController
@@ -68,6 +70,8 @@ public class LoginController {
 	
 	@Autowired
 	UserData userData;
+	
+	LbpUtil lbpUtil = new LbpUtil();
 	
 	@CrossOrigin
 	@GetMapping(value = { "/" }, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -218,14 +222,28 @@ public class LoginController {
 	
 	@CrossOrigin
 	@GetMapping(value = { "/searchitem" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Item> searchItem( @RequestParam(value = "itemName") String itemName,  @RequestParam(value = "category") String category) {
-		List<Item> findItem = new ArrayList();
+	public List<Item> searchItem( @RequestParam(value = "itemName") String itemName,  @RequestParam(value = "category") String category) throws NumberFormatException, IOException {
+		UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = principal.getUser();
+		String origin = user.getAddress() + ", " + user.getCity() + ", " + user.getState() + " " + user.getZipcode() + ", " + user.getCountry();
+				
+		List<Item> findItems = new ArrayList();
 		if (category.equals("")) {
-			findItem = itemRepository.findByItemName(itemName);
+			findItems = itemRepository.findByItemName(itemName);
 		} else {
-			findItem = itemRepository.findByItemNameAndCategory(itemName, category);
+			findItems = itemRepository.findByItemNameAndCategory(itemName, category);
 		}
-		return findItem;
+		
+		List<Item> filteredItems = new ArrayList();
+		for (Item item: findItems) {
+			Store findStore = storeRepository.findByStoreId(item.getStoreId());
+			String destination = findStore.getStreet() + ", " + findStore.getCity() + ", " + findStore.getState() + " " + findStore.getZipcode() + ", " + findStore.getCountry();
+			if (Double.parseDouble(lbpUtil.calculateDistance(origin, destination)) <= Double.parseDouble(user.getSearchdistance())){
+				filteredItems.add(item);
+			}
+		}
+		
+		return filteredItems;
 	}
 	
     // compress the image bytes before storing it in the database
