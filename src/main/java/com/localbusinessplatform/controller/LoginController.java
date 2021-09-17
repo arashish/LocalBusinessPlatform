@@ -48,6 +48,7 @@ import com.localbusinessplatform.model.User;
 import com.localbusinessplatform.repository.ItemRepository;
 import com.localbusinessplatform.repository.StoreRepository;
 import com.localbusinessplatform.repository.UserRepository;
+import com.localbusinessplatform.response.SearchData;
 import com.localbusinessplatform.response.UserData;
 import com.localbusinessplatform.util.JwtUtil;
 import com.localbusinessplatform.util.LbpUtil;
@@ -70,6 +71,9 @@ public class LoginController {
 	
 	@Autowired
 	UserData userData;
+	
+	@Autowired
+	SearchData searchData;
 	
 	LbpUtil lbpUtil = new LbpUtil();
 	
@@ -222,7 +226,7 @@ public class LoginController {
 	
 	@CrossOrigin
 	@GetMapping(value = { "/searchitem" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Item> searchItem( @RequestParam(value = "itemName") String itemName,  @RequestParam(value = "category") String category) throws NumberFormatException, IOException {
+	public List<SearchData> searchItem( @RequestParam(value = "itemName") String itemName,  @RequestParam(value = "category") String category) throws NumberFormatException, IOException {
 		UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = principal.getUser();
 		String origin = user.getAddress() + ", " + user.getCity() + ", " + user.getState() + " " + user.getZipcode() + ", " + user.getCountry();
@@ -234,16 +238,23 @@ public class LoginController {
 			findItems = itemRepository.findByItemNameAndCategory(itemName, category);
 		}
 		
-		List<Item> filteredItems = new ArrayList();
+		//List<Item> filteredItems = new ArrayList();
+		List<SearchData> searchDataList = new ArrayList();
+		
 		for (Item item: findItems) {
 			Store findStore = storeRepository.findByStoreId(item.getStoreId());
 			String destination = findStore.getStreet() + ", " + findStore.getCity() + ", " + findStore.getState() + " " + findStore.getZipcode() + ", " + findStore.getCountry();
-			if (Double.parseDouble(lbpUtil.calculateDistance(origin, destination)) <= Double.parseDouble(user.getSearchdistance())){
-				filteredItems.add(item);
+			Double distance = Double.parseDouble(lbpUtil.calculateDistance(origin, destination));
+			if (distance <= Double.parseDouble(user.getSearchdistance())){
+				//filteredItems.add(item);
+				searchData.setItem(item);
+				searchData.setStore(findStore);
+				searchData.setDistance(distance.toString());
+				searchDataList.add(searchData);
 			}
 		}
 		
-		return filteredItems;
+		return searchDataList;
 	}
 	
     // compress the image bytes before storing it in the database
