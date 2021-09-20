@@ -250,7 +250,7 @@ public class LoginController {
 				searchData.setItem(item);
 				searchData.setStore(findStore);
 				searchData.setDistance(distance.toString());
-				searchDataList.add(searchData);
+				searchDataList.add(new SearchData(searchData));
 			}
 		}
 		
