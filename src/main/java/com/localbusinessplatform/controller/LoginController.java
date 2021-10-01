@@ -43,9 +43,11 @@ import com.localbusinessplatform.google.GoogleResponse;
 import com.localbusinessplatform.impl.UserPrincipal;
 import com.localbusinessplatform.model.Item;
 import com.localbusinessplatform.model.ItemWrapper;
+import com.localbusinessplatform.model.Orderx;
 import com.localbusinessplatform.model.Store;
 import com.localbusinessplatform.model.User;
 import com.localbusinessplatform.repository.ItemRepository;
+import com.localbusinessplatform.repository.OrderxRepository;
 import com.localbusinessplatform.repository.StoreRepository;
 import com.localbusinessplatform.repository.UserRepository;
 import com.localbusinessplatform.response.SearchData;
@@ -65,6 +67,9 @@ public class LoginController {
 	
 	@Autowired
 	ItemRepository itemRepository;
+	
+	@Autowired
+	OrderxRepository orderxRepository;
 	
 	@Autowired
 	JwtUtil jwtUtil;
@@ -255,6 +260,18 @@ public class LoginController {
 		}
 		
 		return searchDataList;
+	}
+	
+	@CrossOrigin
+	@PostMapping(value = { "/createorder" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String createOrder(@RequestBody List<Orderx> orders) throws Exception {
+		if (orders != null) {
+			for (Orderx order: orders) {
+				orderxRepository.save(order);
+			}
+		}
+		
+		return LBPConstants.Status_OK;
 	}
 	
     // compress the image bytes before storing it in the database
