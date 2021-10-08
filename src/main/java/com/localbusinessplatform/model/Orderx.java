@@ -34,6 +34,12 @@ public class Orderx {
 	@Column(name="order_date")
     private String orderDate;
 	
+	@Column(name="payment_method")
+    private String paymentMethod;
+	
+	@Column(name="ship_method")
+    private String shipMethod;
+	
 	@Column(name="shipped_date")
     private String shippedDate;
 	
@@ -100,7 +106,18 @@ public class Orderx {
 	public void setShipVia(String shipVia) {
 		this.shipVia = shipVia;
 	}
-    
+	public String getPaymentMethod() {
+		return paymentMethod;
+	}
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+	public String getShipMethod() {
+		return shipMethod;
+	}
+	public void setShipMethod(String shipMethod) {
+		this.shipMethod = shipMethod;
+	}
     
 	
 }
