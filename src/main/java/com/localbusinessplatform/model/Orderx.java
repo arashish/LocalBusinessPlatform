@@ -11,16 +11,16 @@ public class Orderx {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="order_id")
-    private String orderId;
+    private long orderId;
 	
 	@Column(name="customer_id")
-    private String customerId;
+    private long customerId;
 	
 	@Column(name="store_id")
-    private String storeId;
+    private long storeId;
 	
 	@Column(name="item_id")
-    private String itemId;
+    private long itemId;
 	
 	@Column(name="item_price")
     private String itemPrice;
@@ -45,79 +45,112 @@ public class Orderx {
 	
 	@Column(name="ship_via")
     private String shipVia;
-    
-	public String getOrderId() {
+	
+	@Column(name="ship_tracking")
+    private String shipTracking;
+
+	public long getOrderId() {
 		return orderId;
 	}
-	public void setOrderId(String orderId) {
+
+	public void setOrderId(long orderId) {
 		this.orderId = orderId;
 	}
-	public String getCustomerId() {
+
+	public long getCustomerId() {
 		return customerId;
 	}
-	public void setCustomerId(String customerId) {
+
+	public void setCustomerId(long customerId) {
 		this.customerId = customerId;
 	}
-	public String getStoreId() {
+
+	public long getStoreId() {
 		return storeId;
 	}
-	public void setStoreId(String storeId) {
+
+	public void setStoreId(long storeId) {
 		this.storeId = storeId;
 	}
-	public String getItemId() {
+
+	public long getItemId() {
 		return itemId;
 	}
-	public void setItemId(String itemId) {
+
+	public void setItemId(long itemId) {
 		this.itemId = itemId;
 	}
+
 	public String getItemPrice() {
 		return itemPrice;
 	}
+
 	public void setItemPrice(String itemPrice) {
 		this.itemPrice = itemPrice;
 	}
+
 	public String getOrderQty() {
 		return orderQty;
 	}
+
 	public void setOrderQty(String orderQty) {
 		this.orderQty = orderQty;
 	}
+
 	public String getOrderStatus() {
 		return orderStatus;
 	}
+
 	public void setOrderStatus(String orderStatus) {
 		this.orderStatus = orderStatus;
 	}
+
 	public String getOrderDate() {
 		return orderDate;
 	}
+
 	public void setOrderDate(String orderDate) {
 		this.orderDate = orderDate;
 	}
-	public String getShippedDate() {
-		return shippedDate;
-	}
-	public void setShippedDate(String shippedDate) {
-		this.shippedDate = shippedDate;
-	}
-	public String getShipVia() {
-		return shipVia;
-	}
-	public void setShipVia(String shipVia) {
-		this.shipVia = shipVia;
-	}
+
 	public String getPaymentMethod() {
 		return paymentMethod;
 	}
+
 	public void setPaymentMethod(String paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
+
 	public String getShipMethod() {
 		return shipMethod;
 	}
+
 	public void setShipMethod(String shipMethod) {
 		this.shipMethod = shipMethod;
 	}
+
+	public String getShippedDate() {
+		return shippedDate;
+	}
+
+	public void setShippedDate(String shippedDate) {
+		this.shippedDate = shippedDate;
+	}
+
+	public String getShipVia() {
+		return shipVia;
+	}
+
+	public void setShipVia(String shipVia) {
+		this.shipVia = shipVia;
+	}
+
+	public String getShipTracking() {
+		return shipTracking;
+	}
+
+	public void setShipTracking(String shipTracking) {
+		this.shipTracking = shipTracking;
+	}
     
-	
 }

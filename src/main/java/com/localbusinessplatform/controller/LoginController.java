@@ -50,6 +50,7 @@ import com.localbusinessplatform.repository.ItemRepository;
 import com.localbusinessplatform.repository.OrderxRepository;
 import com.localbusinessplatform.repository.StoreRepository;
 import com.localbusinessplatform.repository.UserRepository;
+import com.localbusinessplatform.response.OrderData;
 import com.localbusinessplatform.response.SearchData;
 import com.localbusinessplatform.response.UserData;
 import com.localbusinessplatform.util.JwtUtil;
@@ -79,6 +80,9 @@ public class LoginController {
 	
 	@Autowired
 	SearchData searchData;
+	
+	@Autowired
+	OrderData orderData;
 	
 	LbpUtil lbpUtil = new LbpUtil();
 	
@@ -134,9 +138,10 @@ public class LoginController {
 	@CrossOrigin
 	@PostMapping(value = "/updateprofile", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String profile(@RequestBody User user) throws Exception {
-		Optional<User> finduser = userRepository.findById(user.getId());
-		if (finduser.isPresent()) {
-			User existingUser = finduser.get();
+		User finduser = userRepository.findById(user.getId());
+		
+		if (finduser != null) { //finduser.isPresent()
+			//User existingUser = finduser.get();
 			userRepository.save(user);
 			// existing user
 		} else {
@@ -270,9 +275,83 @@ public class LoginController {
 				orderxRepository.save(order);
 			}
 		}
+		return LBPConstants.Status_OK;
+	}
+	
+	@CrossOrigin
+	@PostMapping(value = { "/shiporder" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String shipOrder(@RequestBody Orderx order) throws Exception {
+		if (order != null) {
+			orderxRepository.save(order);
+		}
 		
 		return LBPConstants.Status_OK;
 	}
+	
+	
+	@CrossOrigin
+	@GetMapping(value = { "/checkorder" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<OrderData> checkOrder() throws Exception {
+		UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = principal.getUser();
+		
+		Store findStore = storeRepository.findByUserId(user.getId());
+		
+		List<Orderx> findOrders = new ArrayList();
+
+		if (findStore != null) {
+			findOrders = orderxRepository.findByStoreId(findStore.getStoreId());
+		}
+		
+		List<OrderData> orderDataList = new ArrayList();
+		
+		for (Orderx order: findOrders) {
+			User customer = userRepository.findById(order.getCustomerId());
+			Store store = storeRepository.findByStoreId(order.getStoreId());
+			Item item = itemRepository.findByItemId(order.getItemId());
+			
+			orderData.setOrder(order);
+			orderData.setCustomer(customer);
+			orderData.setStore(store);
+			orderData.setItem(item);
+			
+			orderDataList.add(new OrderData(orderData));
+		}
+		
+		return orderDataList;
+	}
+	
+	
+	@CrossOrigin
+	@GetMapping(value = { "/orderstatus" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<OrderData> orderStatus() throws Exception {
+		UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = principal.getUser();
+		
+		List<Orderx> findOrders = new ArrayList();
+		
+		if (user != null) {
+			findOrders = orderxRepository.findByCustomerId(user.getId());
+		}
+		
+		List<OrderData> orderDataList = new ArrayList();
+		
+		for (Orderx order: findOrders) {
+			User customer = userRepository.findById(order.getCustomerId());
+			Store store = storeRepository.findByStoreId(order.getStoreId());
+			Item item = itemRepository.findByItemId(order.getItemId());
+			
+			orderData.setOrder(order);
+			orderData.setCustomer(customer);
+			orderData.setStore(store);
+			orderData.setItem(item);
+			
+			orderDataList.add(new OrderData(orderData));
+		}
+		
+		return orderDataList;
+	}
+	
 	
     // compress the image bytes before storing it in the database
     public byte[] compressFile(byte[] image) {
