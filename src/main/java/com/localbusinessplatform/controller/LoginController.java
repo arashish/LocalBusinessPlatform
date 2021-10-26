@@ -43,10 +43,12 @@ import com.localbusinessplatform.google.GoogleResponse;
 import com.localbusinessplatform.impl.UserPrincipal;
 import com.localbusinessplatform.model.Item;
 import com.localbusinessplatform.model.ItemWrapper;
+import com.localbusinessplatform.model.MessageCenter;
 import com.localbusinessplatform.model.Orderx;
 import com.localbusinessplatform.model.Store;
 import com.localbusinessplatform.model.User;
 import com.localbusinessplatform.repository.ItemRepository;
+import com.localbusinessplatform.repository.MessageCenterRepository;
 import com.localbusinessplatform.repository.OrderxRepository;
 import com.localbusinessplatform.repository.StoreRepository;
 import com.localbusinessplatform.repository.UserRepository;
@@ -71,6 +73,9 @@ public class LoginController {
 	
 	@Autowired
 	OrderxRepository orderxRepository;
+	
+	@Autowired
+	MessageCenterRepository messageCenterRepository;
 	
 	@Autowired
 	JwtUtil jwtUtil;
@@ -350,6 +355,15 @@ public class LoginController {
 		}
 		
 		return orderDataList;
+	}
+	
+	@CrossOrigin
+	@PostMapping(value = { "/createmessage" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String createMessage(@RequestBody MessageCenter messageCenter) throws Exception {
+		if (messageCenter != null) {
+				messageCenterRepository.save(messageCenter);
+		}
+		return LBPConstants.Status_OK;
 	}
 	
 	
