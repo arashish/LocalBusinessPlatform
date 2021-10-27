@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.localbusinessplatform.model.Item;
+import com.localbusinessplatform.model.MessageCenter;
 import com.localbusinessplatform.model.Store;
 import com.localbusinessplatform.model.User;
 
@@ -14,9 +15,9 @@ public class UserData {
 	
 	User user;
 	Store store;
-	
 	List<Item> item;
-
+	List<MessageCenter> messageCenter;
+	
 	public User getUser() {
 		return user;
 	}
@@ -41,5 +42,12 @@ public class UserData {
 		this.item = item;
 	}
 
+	public List<MessageCenter> getMessageCenter() {
+		return messageCenter;
+	}
 
+	public void setMessageCenter(List<MessageCenter> messageCenter) {
+		this.messageCenter = messageCenter;
+	}
+	
 }

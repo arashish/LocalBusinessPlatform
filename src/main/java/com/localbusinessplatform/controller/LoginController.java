@@ -108,9 +108,12 @@ public class LoginController {
 		User user = principal.getUser();
 		Store findStore = storeRepository.findByUserId(user.getId());
 		List<Item> findItem = new ArrayList();
+		
 		if (findStore != null) {
 			findItem = itemRepository.findByStoreId(findStore.getStoreId());
 		}
+		
+		List<MessageCenter> findMessages = messageCenterRepository.findBySenderIdOrRecipientId(user.getId(), user.getId());
 		
 		userData = new UserData();
 		if (user != null) {
@@ -125,6 +128,9 @@ public class LoginController {
 			userData.setItem(findItem);
 		}
 		
+		if (findMessages != null) {
+			userData.setMessageCenter(findMessages);
+		}
 		
 		return userData;
 	}
