@@ -14,11 +14,11 @@ public class MessageCenter {
 	@Column(name="message_id")
     private long messageId;
 	
-	@Column(name="sender_id")
-	private long senderId;
+	@Column(name="sender_username")
+	private String senderUsername;
 
-	@Column(name="recipient_id")
-	private long recipientId;
+	@Column(name="recipient_username")
+	private String recipientUsername;
 	
 	private String message;
 	
@@ -42,20 +42,20 @@ public class MessageCenter {
 		this.messageId = messageId;
 	}
 
-	public long getSenderId() {
-		return senderId;
+	public String getSenderUsername() {
+		return senderUsername;
 	}
 
-	public void setSenderId(long senderId) {
-		this.senderId = senderId;
+	public void setSenderUsername(String senderUsername) {
+		this.senderUsername = senderUsername;
 	}
 
-	public long getRecipientId() {
-		return recipientId;
+	public String getRecipientUsername() {
+		return recipientUsername;
 	}
 
-	public void setRecipientId(long recipientId) {
-		this.recipientId = recipientId;
+	public void setRecipientUsername(String recipientUsername) {
+		this.recipientUsername = recipientUsername;
 	}
 
 	public String getMessage() {
@@ -97,7 +97,6 @@ public class MessageCenter {
 	public void setMessageCategory(String messageCategory) {
 		this.messageCategory = messageCategory;
 	}
-	
-	
+
 	
 }

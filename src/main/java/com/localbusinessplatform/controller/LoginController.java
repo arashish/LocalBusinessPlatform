@@ -113,7 +113,7 @@ public class LoginController {
 			findItem = itemRepository.findByStoreId(findStore.getStoreId());
 		}
 		
-		List<MessageCenter> findMessages = messageCenterRepository.findBySenderIdOrRecipientId(user.getId(), user.getId());
+		List<MessageCenter> findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
 		
 		userData = new UserData();
 		if (user != null) {

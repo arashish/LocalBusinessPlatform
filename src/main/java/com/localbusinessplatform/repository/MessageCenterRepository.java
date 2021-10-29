@@ -10,5 +10,5 @@ import com.localbusinessplatform.model.Orderx;
 
 public interface MessageCenterRepository extends JpaRepository<MessageCenter, Long>{
 	MessageCenter findByMessageId(long mesage_id);
-	List<MessageCenter> findBySenderIdOrRecipientId(long sender_id, long recipient_id);
+	List<MessageCenter> findBySenderUsernameOrRecipientUsername(String sender_username, String recipient_username);
 }
