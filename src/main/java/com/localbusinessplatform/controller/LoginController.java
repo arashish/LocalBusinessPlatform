@@ -108,12 +108,18 @@ public class LoginController {
 		User user = principal.getUser();
 		Store findStore = storeRepository.findByUserId(user.getId());
 		List<Item> findItem = new ArrayList();
+		List<MessageCenter> findMessages = new ArrayList();
 		
 		if (findStore != null) {
 			findItem = itemRepository.findByStoreId(findStore.getStoreId());
+			if (findStore.getPublish()== true) {
+				findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(findStore.getEmail(), findStore.getEmail());
+			} else {
+				findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
+			}
+		} else {
+			findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
 		}
-		
-		List<MessageCenter> findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
 		
 		userData = new UserData();
 		if (user != null) {
@@ -370,6 +376,31 @@ public class LoginController {
 				messageCenterRepository.save(messageCenter);
 		}
 		return LBPConstants.Status_OK;
+	}
+	
+	@CrossOrigin
+	@PostMapping(value = { "/updatemessage" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<MessageCenter> updateMessage(@RequestBody MessageCenter messageCenter) throws Exception {
+		List<MessageCenter> findMessages = new ArrayList();
+		if (messageCenter != null) {
+			messageCenterRepository.save(messageCenter);
+			//Retrieving the updated messages
+			UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = principal.getUser();
+			Store findStore = storeRepository.findByUserId(user.getId());
+			findMessages = new ArrayList();
+			
+			if (findStore != null) {
+				if (findStore.getPublish()== true) {
+					findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(findStore.getEmail(), findStore.getEmail());
+				} else {
+					findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
+				}
+			} else {
+				findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
+			}
+		}
+		return findMessages;
 	}
 	
 	

@@ -92,7 +92,7 @@ public class Store {
 		this.zipcode = zipcode;
 	}
 
-	public boolean isPublish() {
+	public boolean getPublish() {
 		return publish;
 	}
 
