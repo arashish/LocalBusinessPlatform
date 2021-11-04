@@ -369,14 +369,27 @@ public class LoginController {
 		return orderDataList;
 	}
 	
-	@CrossOrigin
-	@PostMapping(value = { "/createmessage" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public String createMessage(@RequestBody MessageCenter messageCenter) throws Exception {
-		if (messageCenter != null) {
-				messageCenterRepository.save(messageCenter);
-		}
-		return LBPConstants.Status_OK;
-	}
+	/*
+	 * @CrossOrigin
+	 * 
+	 * @PostMapping(value = { "/createmessage" }, produces =
+	 * MediaType.APPLICATION_JSON_VALUE) public List<MessageCenter>
+	 * createMessage(@RequestBody MessageCenter messageCenter) throws Exception {
+	 * List<MessageCenter> findMessages = new ArrayList(); if (messageCenter !=
+	 * null) { messageCenterRepository.save(messageCenter); //Retrieving the updated
+	 * messages UserPrincipal principal = (UserPrincipal)
+	 * SecurityContextHolder.getContext().getAuthentication().getPrincipal(); User
+	 * user = principal.getUser(); Store findStore =
+	 * storeRepository.findByUserId(user.getId()); findMessages = new ArrayList();
+	 * 
+	 * if (findStore != null) { if (findStore.getPublish()== true) { findMessages =
+	 * messageCenterRepository.findBySenderUsernameOrRecipientUsername(findStore.
+	 * getEmail(), findStore.getEmail()); } else { findMessages =
+	 * messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.
+	 * getUsername(), user.getUsername()); } } else { findMessages =
+	 * messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.
+	 * getUsername(), user.getUsername()); } } return findMessages; }
+	 */
 	
 	@CrossOrigin
 	@PostMapping(value = { "/updatemessage" }, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -403,7 +416,31 @@ public class LoginController {
 		return findMessages;
 	}
 	
-	
+	@CrossOrigin
+	@PostMapping(value = { "/deletemessage" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<MessageCenter> deleteMessage(@RequestBody MessageCenter messageCenter) throws Exception {
+		List<MessageCenter> findMessages = new ArrayList();
+		if (messageCenter != null) {
+			messageCenterRepository.deleteByMessageId(messageCenter.getMessageId());
+			//Retrieving the updated messages
+			UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = principal.getUser();
+			Store findStore = storeRepository.findByUserId(user.getId());
+			findMessages = new ArrayList();
+			
+			if (findStore != null) {
+				if (findStore.getPublish()== true) {
+					findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(findStore.getEmail(), findStore.getEmail());
+				} else {
+					findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
+				}
+			} else {
+				findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
+			}
+		}
+		return findMessages;
+	}
+
     // compress the image bytes before storing it in the database
     public byte[] compressFile(byte[] image) {
         Deflater compress = new Deflater();
