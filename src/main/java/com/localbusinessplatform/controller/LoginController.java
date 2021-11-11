@@ -45,11 +45,13 @@ import com.localbusinessplatform.model.Item;
 import com.localbusinessplatform.model.ItemWrapper;
 import com.localbusinessplatform.model.MessageCenter;
 import com.localbusinessplatform.model.Orderx;
+import com.localbusinessplatform.model.Review;
 import com.localbusinessplatform.model.Store;
 import com.localbusinessplatform.model.User;
 import com.localbusinessplatform.repository.ItemRepository;
 import com.localbusinessplatform.repository.MessageCenterRepository;
 import com.localbusinessplatform.repository.OrderxRepository;
+import com.localbusinessplatform.repository.ReviewRepository;
 import com.localbusinessplatform.repository.StoreRepository;
 import com.localbusinessplatform.repository.UserRepository;
 import com.localbusinessplatform.response.OrderData;
@@ -76,6 +78,9 @@ public class LoginController {
 	
 	@Autowired
 	MessageCenterRepository messageCenterRepository;
+	
+	@Autowired
+	ReviewRepository reviewRepository;
 	
 	@Autowired
 	JwtUtil jwtUtil;
@@ -272,11 +277,15 @@ public class LoginController {
 			Store findStore = storeRepository.findByStoreId(item.getStoreId());
 			String destination = findStore.getStreet() + ", " + findStore.getCity() + ", " + findStore.getState() + " " + findStore.getZipcode() + ", " + findStore.getCountry();
 			Double distance = Double.parseDouble(lbpUtil.calculateDistance(origin, destination));
+			
+			List<Review> review = reviewRepository.findByrevieweeUsername(findStore.getEmail());
+			
 			if (distance <= Double.parseDouble(user.getSearchdistance())){
 				//filteredItems.add(item);
 				searchData.setItem(item);
 				searchData.setStore(findStore);
 				searchData.setDistance(distance.toString());
+				searchData.setReview(review);
 				searchDataList.add(new SearchData(searchData));
 			}
 		}
@@ -439,6 +448,15 @@ public class LoginController {
 			}
 		}
 		return findMessages;
+	}
+	
+	@CrossOrigin
+	@PostMapping(value = { "/createreview" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String createReview(@RequestBody Review review) throws Exception {
+		if (review != null) {
+			reviewRepository.save(review);
+		}
+		return LBPConstants.Status_OK;
 	}
 
     // compress the image bytes before storing it in the database

@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDa
 import org.springframework.stereotype.Component;
 
 import com.localbusinessplatform.model.Item;
+import com.localbusinessplatform.model.Review;
 import com.localbusinessplatform.model.Store;
 
 @Component
@@ -16,7 +17,8 @@ public class SearchData {
 	Item item;
 	
 	String distance;
-
+	
+	List<Review> review;
 	
 	
 	public SearchData() {
@@ -28,6 +30,7 @@ public class SearchData {
 		this.store = searchData.getStore();
 		this.item = searchData.getItem();
 		this.distance = searchData.getDistance();
+		this.review = searchData.getReview();
 	}
 
 	public Store getStore() {
@@ -52,6 +55,14 @@ public class SearchData {
 
 	public void setDistance(String distance) {
 		this.distance = distance;
+	}
+
+	public List<Review> getReview() {
+		return review;
+	}
+
+	public void setReview(List<Review> review) {
+		this.review = review;
 	}
 	
 }
