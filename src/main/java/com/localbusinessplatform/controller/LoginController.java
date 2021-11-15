@@ -114,16 +114,20 @@ public class LoginController {
 		Store findStore = storeRepository.findByUserId(user.getId());
 		List<Item> findItem = new ArrayList();
 		List<MessageCenter> findMessages = new ArrayList();
+		List<Review> findReviews = new ArrayList();
 		
-		if (findStore != null) {
+		if (findStore != null) { //if the user is a seller then it will retrieve the messages and reviews by using storeId
 			findItem = itemRepository.findByStoreId(findStore.getStoreId());
 			if (findStore.getPublish()== true) {
 				findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(findStore.getEmail(), findStore.getEmail());
+				findReviews = reviewRepository.findByrevieweeUsername(findStore.getEmail());
 			} else {
 				findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
+				findReviews = reviewRepository.findByrevieweeUsername(user.getUsername());
 			}
 		} else {
 			findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
+			findReviews = reviewRepository.findByrevieweeUsername(user.getUsername());
 		}
 		
 		userData = new UserData();
@@ -141,6 +145,10 @@ public class LoginController {
 		
 		if (findMessages != null) {
 			userData.setMessageCenter(findMessages);
+		}
+		
+		if (findReviews !=null) {
+			userData.setReview(findReviews);
 		}
 		
 		return userData;
@@ -335,11 +343,13 @@ public class LoginController {
 			User customer = userRepository.findById(order.getCustomerId());
 			Store store = storeRepository.findByStoreId(order.getStoreId());
 			Item item = itemRepository.findByItemId(order.getItemId());
+			List<Review> review = reviewRepository.findByrevieweeUsername(customer.getUsername());
 			
 			orderData.setOrder(order);
 			orderData.setCustomer(customer);
 			orderData.setStore(store);
 			orderData.setItem(item);
+			orderData.setReview(review);
 			
 			orderDataList.add(new OrderData(orderData));
 		}
@@ -366,11 +376,13 @@ public class LoginController {
 			User customer = userRepository.findById(order.getCustomerId());
 			Store store = storeRepository.findByStoreId(order.getStoreId());
 			Item item = itemRepository.findByItemId(order.getItemId());
+			List<Review> review = reviewRepository.findByrevieweeUsername(customer.getUsername());
 			
 			orderData.setOrder(order);
 			orderData.setCustomer(customer);
 			orderData.setStore(store);
 			orderData.setItem(item);
+			orderData.setReview(review);
 			
 			orderDataList.add(new OrderData(orderData));
 		}

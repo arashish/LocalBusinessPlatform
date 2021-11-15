@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.localbusinessplatform.model.Item;
 import com.localbusinessplatform.model.Orderx;
+import com.localbusinessplatform.model.Review;
 import com.localbusinessplatform.model.Store;
 import com.localbusinessplatform.model.User;
 
@@ -21,6 +22,7 @@ public class OrderData {
 	
 	Item item;
 	
+	List<Review> review;
 	
 	public OrderData() {
 		super();
@@ -32,6 +34,7 @@ public class OrderData {
 		this.customer = orderData.getCustomer();
 		this.store = orderData.getStore();
 		this.item = orderData.getItem();
+		this.review = orderData.getReview();
 	}
 
 	public Orderx getOrder() {
@@ -65,10 +68,13 @@ public class OrderData {
 	public void setItem(Item item) {
 		this.item = item;
 	}
-	
-	
-	
-	
 
-	
+	public List<Review> getReview() {
+		return review;
+	}
+
+	public void setReview(List<Review> review) {
+		this.review = review;
+	}
+			
 }
