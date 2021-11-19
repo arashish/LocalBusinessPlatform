@@ -272,13 +272,16 @@ public class LoginController {
 		String origin = user.getAddress() + ", " + user.getCity() + ", " + user.getState() + " " + user.getZipcode() + ", " + user.getCountry();
 				
 		List<Item> findItems = new ArrayList();
-		if (category.equals("")) {
-			findItems = itemRepository.findByItemName(itemName);
-		} else {
-			findItems = itemRepository.findByItemNameAndCategory(itemName, category);
+		if (category.equals("All Category") && !itemName.equals("")) {
+			findItems = itemRepository.findByItemNameOrDescriptionContains(itemName,itemName);
+		}else if(category.equals("All Category") && itemName.equals("") ){
+			findItems = itemRepository.findAll();
+		}else if (!category.equals("All Category") && itemName.equals("")) {
+			findItems = itemRepository.findByCategory(category);
+		}else {
+			findItems = itemRepository.findByItemNameOrDescriptionAndCategoryContains(itemName, itemName, category);
 		}
-		
-		//List<Item> filteredItems = new ArrayList();
+	
 		List<SearchData> searchDataList = new ArrayList();
 		
 		for (Item item: findItems) {
