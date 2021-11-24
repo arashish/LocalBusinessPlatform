@@ -379,7 +379,7 @@ public class LoginController {
 			User customer = userRepository.findById(order.getCustomerId());
 			Store store = storeRepository.findByStoreId(order.getStoreId());
 			Item item = itemRepository.findByItemId(order.getItemId());
-			List<Review> review = reviewRepository.findByrevieweeUsername(customer.getUsername());
+			List<Review> review = reviewRepository.findByrevieweeUsername(store.getEmail()); //was customer.getUsername() //buyer wants to see the info of the seller in the review
 			
 			orderData.setOrder(order);
 			orderData.setCustomer(customer);
