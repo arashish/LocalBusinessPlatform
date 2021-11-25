@@ -157,7 +157,6 @@ public class LoginController {
 	@CrossOrigin
 	@PostMapping(value = { "/signup" }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public String addUser(@RequestBody User user) throws Exception {
-		user.setActive(false); // default
 		LocalDate localDate = LocalDate.now();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 		user.setRegistrationdate(dtf.format(localDate));
@@ -193,7 +192,6 @@ public class LoginController {
 	@CrossOrigin
 	@PostMapping(value = { "/createstore" }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public String createStore(@RequestBody Store store) throws Exception {
-		store.setPublish(false); // default
 		LocalDate localDate = LocalDate.now();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 		store.setRegistrationDate(dtf.format(localDate));
@@ -286,18 +284,20 @@ public class LoginController {
 		
 		for (Item item: findItems) {
 			Store findStore = storeRepository.findByStoreId(item.getStoreId());
-			String destination = findStore.getStreet() + ", " + findStore.getCity() + ", " + findStore.getState() + " " + findStore.getZipcode() + ", " + findStore.getCountry();
-			Double distance = Double.parseDouble(lbpUtil.calculateDistance(origin, destination));
-			
-			List<Review> review = reviewRepository.findByrevieweeUsername(findStore.getEmail());
-			
-			if (distance <= Double.parseDouble(user.getSearchdistance())){
-				//filteredItems.add(item);
-				searchData.setItem(item);
-				searchData.setStore(findStore);
-				searchData.setDistance(distance.toString());
-				searchData.setReview(review);
-				searchDataList.add(new SearchData(searchData));
+			if (findStore.getPublish()) {
+				String destination = findStore.getStreet() + ", " + findStore.getCity() + ", " + findStore.getState() + " " + findStore.getZipcode() + ", " + findStore.getCountry();
+				Double distance = Double.parseDouble(lbpUtil.calculateDistance(origin, destination));
+				
+				List<Review> review = reviewRepository.findByrevieweeUsername(findStore.getEmail());
+				
+				if (distance <= Double.parseDouble(user.getSearchdistance())){
+					//filteredItems.add(item);
+					searchData.setItem(item);
+					searchData.setStore(findStore);
+					searchData.setDistance(distance.toString());
+					searchData.setReview(review);
+					searchDataList.add(new SearchData(searchData));
+				}
 			}
 		}
 		

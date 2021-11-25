@@ -18,7 +18,6 @@ public class User {
 	private String username;
 	private String password;
 	private String usertype;
-	private boolean active;
 	private String registrationdate;
 	private String phone;
 	private String address;
@@ -94,12 +93,6 @@ public class User {
 	}
 	public void setUsertype(String usertype) {
 		this.usertype = usertype;
-	}
-	public boolean isActive() {
-		return active;
-	}
-	public void setActive(boolean active) {
-		this.active = active;
 	}
 	public String getRegistrationdate() {
 		return registrationdate;
