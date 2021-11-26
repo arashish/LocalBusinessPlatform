@@ -20,7 +20,7 @@ public class Item {
 	private String category;
 	
 	@Column(name="inventory_qty")
-	private String inventoryQty;
+	private int inventoryQty;
 	
 	private String price;
 	
@@ -61,12 +61,12 @@ public class Item {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-
-	public String getInventoryQty() {
+	
+	public int getInventoryQty() {
 		return inventoryQty;
 	}
 
-	public void setInventoryQty(String inventoryQty) {
+	public void setInventoryQty(int inventoryQty) {
 		this.inventoryQty = inventoryQty;
 	}
 

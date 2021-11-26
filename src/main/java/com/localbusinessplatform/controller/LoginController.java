@@ -319,7 +319,15 @@ public class LoginController {
 	@PostMapping(value = { "/shiporder" }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public String shipOrder(@RequestBody Orderx order) throws Exception {
 		if (order != null) {
+			Item item = itemRepository.findByItemId(order.getItemId());
+			int newInventory = item.getInventoryQty() - order.getOrderQty();
+			if (newInventory >= 0) {
+			item.setInventoryQty(newInventory);
+			itemRepository.save(item);
 			orderxRepository.save(order);
+			} else {
+				throw new Exception(LBPConstants.Status_NotAcceptable , new Error());
+			}
 		}
 		
 		return LBPConstants.Status_OK;

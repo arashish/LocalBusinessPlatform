@@ -26,7 +26,7 @@ public class Orderx {
     private String itemPrice;
 	
 	@Column(name="order_qty")
-    private String orderQty;
+    private int orderQty;
 	
 	@Column(name="order_status")
     private String orderStatus;
@@ -89,11 +89,11 @@ public class Orderx {
 		this.itemPrice = itemPrice;
 	}
 
-	public String getOrderQty() {
+	public int getOrderQty() {
 		return orderQty;
 	}
 
-	public void setOrderQty(String orderQty) {
+	public void setOrderQty(int orderQty) {
 		this.orderQty = orderQty;
 	}
 

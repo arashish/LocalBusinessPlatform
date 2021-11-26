@@ -17,7 +17,7 @@ public class ItemWrapper {
 	private String itemName;
 	private String description;
 	private String category;
-	private String inventoryQty;
+	private int inventoryQty;
 	private String price;
  	private long storeId;
  	
@@ -45,10 +45,10 @@ public class ItemWrapper {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	public String getInventoryQty() {
+	public int getInventoryQty() {
 		return inventoryQty;
 	}
-	public void setInventoryQty(String inventoryQty) {
+	public void setInventoryQty(int inventoryQty) {
 		this.inventoryQty = inventoryQty;
 	}
 	public String getPrice() {
