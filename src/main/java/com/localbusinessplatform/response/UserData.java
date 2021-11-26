@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.localbusinessplatform.model.Item;
 import com.localbusinessplatform.model.MessageCenter;
+import com.localbusinessplatform.model.Orderx;
 import com.localbusinessplatform.model.Review;
 import com.localbusinessplatform.model.Store;
 import com.localbusinessplatform.model.User;
@@ -18,6 +19,7 @@ public class UserData {
 	Store store;
 	List<Item> item;
 	List<MessageCenter> messageCenter;
+	List<Orderx> order;
 	List<Review> review;
 	
 	public User getUser() {
@@ -50,6 +52,14 @@ public class UserData {
 
 	public void setMessageCenter(List<MessageCenter> messageCenter) {
 		this.messageCenter = messageCenter;
+	}
+	
+	public List<Orderx> getOrder() {
+		return order;
+	}
+
+	public void setOrder(List<Orderx> order) {
+		this.order = order;
 	}
 
 	public List<Review> getReview() {

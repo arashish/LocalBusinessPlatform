@@ -115,19 +115,23 @@ public class LoginController {
 		List<Item> findItem = new ArrayList();
 		List<MessageCenter> findMessages = new ArrayList();
 		List<Review> findReviews = new ArrayList();
+		List<Orderx> findOrders = new ArrayList();
 		
 		if (findStore != null) { //if the user is a seller then it will retrieve the messages and reviews by using storeId
 			findItem = itemRepository.findByStoreId(findStore.getStoreId());
 			if (findStore.getPublish()== true) {
 				findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(findStore.getEmail(), findStore.getEmail());
 				findReviews = reviewRepository.findByrevieweeUsername(findStore.getEmail());
+				findOrders = orderxRepository.findByStoreId(findStore.getStoreId());
 			} else {
 				findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
 				findReviews = reviewRepository.findByrevieweeUsername(user.getUsername());
+				findOrders = orderxRepository.findByCustomerId(user.getId());
 			}
 		} else {
 			findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
 			findReviews = reviewRepository.findByrevieweeUsername(user.getUsername());
+			findOrders = orderxRepository.findByCustomerId(user.getId());
 		}
 		
 		userData = new UserData();
@@ -145,6 +149,10 @@ public class LoginController {
 		
 		if (findMessages != null) {
 			userData.setMessageCenter(findMessages);
+		}
+		
+		if (findOrders != null) {
+			userData.setOrder(findOrders);
 		}
 		
 		if (findReviews !=null) {
