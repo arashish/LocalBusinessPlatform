@@ -1,9 +1,18 @@
 package com.localbusinessplatform.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.zip.Deflater;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.localbusinessplatform.google.GoogleResponse;
+import com.localbusinessplatform.model.Orderx;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -24,5 +33,39 @@ public class LbpUtil {
 			
 			return googleResponse.getRows().get(0).getElements().get(0).getDistance().getText().replaceAll(" mi", "");
 	}
+	
+	public void sortArrayList(List<Orderx> order){
+		//Sort String Date
+		Collections.sort(order, new Comparator<Orderx>() {
+		DateFormat f = new SimpleDateFormat("MM/dd/yyyy");
+		@Override
+		public int compare(Orderx o1, Orderx o2) {
+		try {
+		  return f.parse(o1.getOrderDate()).compareTo(f.parse(o2.getOrderDate()));
+		    } catch (ParseException e) {
+		      throw new IllegalArgumentException(e);
+		    }
+		}
+		}.reversed());
+	}
+	
+    // compress the image bytes before storing it in the database
+    public byte[] compressFile(byte[] image) {
+        Deflater compress = new Deflater();
+        compress.setInput(image);
+        compress.finish();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(image.length);
+        byte[] bufferSize = new byte[1024];
+        while (!compress.finished()) {
+            int ct = compress.deflate(bufferSize);
+            byteArrayOutputStream.write(bufferSize, 0, ct);
+        }
+        try {
+        	byteArrayOutputStream.close();
+        } catch (IOException e) {
+        }
+        return byteArrayOutputStream.toByteArray();
+
+    }
 	
 }
