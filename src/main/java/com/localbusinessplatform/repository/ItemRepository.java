@@ -26,4 +26,7 @@ public interface ItemRepository extends JpaRepository<Item, Long>{
 	@Transactional
 	public void deleteByItemId(long item_id);
 	
+	@Transactional
+	public void deleteByStoreId(long store_id);
+	
 }

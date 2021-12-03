@@ -59,23 +59,20 @@ public class LbpService {
 	LbpUtil lbpUtil = new LbpUtil();
 	
 	public UserData getUserInformation(User user) {
-		Store findStore = storeRepository.findByUserId(user.getId());
 		List<Item> findItem = new ArrayList();
 		List<MessageCenter> findMessages = new ArrayList();
 		List<Review> findReviews = new ArrayList();
 		List<Orderx> findOrders = new ArrayList();
-		
-		if (findStore != null) { //if the user is a seller then it will retrieve the messages and reviews by using storeId
-			findItem = itemRepository.findByStoreId(findStore.getStoreId());
-			if (findStore.getPublish()== true) {
+		Store findStore = new Store();
+	
+		if (user.getUsertype().equals("seller")) { //if the user is a seller then it will retrieve the messages and reviews by using storeId
+			findStore = storeRepository.findByUserId(user.getId());
+			if (findStore != null) {
+				findItem = itemRepository.findByStoreId(findStore.getStoreId());
 				findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(findStore.getEmail(), findStore.getEmail());
 				findReviews = reviewRepository.findByrevieweeUsername(findStore.getEmail());
 				findOrders = orderxRepository.findByStoreId(findStore.getStoreId());
-			} else {
-				findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
-				findReviews = reviewRepository.findByrevieweeUsername(user.getUsername());
-				findOrders = orderxRepository.findByCustomerId(user.getId());
-			}
+			} 
 		} else {
 			findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
 			findReviews = reviewRepository.findByrevieweeUsername(user.getUsername());
@@ -162,6 +159,7 @@ public class LbpService {
 	
 	public String deleteStore(int storeId) {
 		storeRepository.deleteByStoreId(storeId);
+		itemRepository.deleteByStoreId(storeId); //deletes all the items that are sold by that deleted store
 		return LBPConstants.Status_OK;
 	}
 
@@ -175,12 +173,7 @@ public class LbpService {
 		item.setItemImage(file.getBytes());
 		item.setStoreId(itemWrapper.getStoreId());
 		itemRepository.save(item);
-	    //Image img = new Image(file.getOriginalFilename(), file.getContentType(), compressBytes(file.getBytes()));
-		//item.setItemImage(null);
 		Item findItem = itemRepository.findByItemId(item.getItemId());
-//		if (findItem != null) {
-//			return findItem;
-//		}
 		return findItem;
 	}
 	
@@ -313,15 +306,14 @@ public class LbpService {
 			//Retrieving the updated messages
 			UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = principal.getUser();
-			Store findStore = storeRepository.findByUserId(user.getId());
+			Store findStore = new Store();
 			findMessages = new ArrayList();
 			
-			if (findStore != null) {
-				if (findStore.getPublish()== true) {
+			if (user.getUsertype().equals("seller")) {
+				findStore = storeRepository.findByUserId(user.getId());
+				if (findStore != null) {
 					findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(findStore.getEmail(), findStore.getEmail());
-				} else {
-					findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
-				}
+				} 
 			} else {
 				findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
 			}
@@ -336,15 +328,14 @@ public class LbpService {
 			//Retrieving the updated messages
 			UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			User user = principal.getUser();
-			Store findStore = storeRepository.findByUserId(user.getId());
+			Store findStore = new Store();
 			findMessages = new ArrayList();
 			
-			if (findStore != null) {
-				if (findStore.getPublish()== true) {
+			if (user.getUsertype().equals("seller")) {
+				findStore = storeRepository.findByUserId(user.getId());
+				if (findStore != null) {
 					findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(findStore.getEmail(), findStore.getEmail());
-				} else {
-					findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
-				}
+				} 
 			} else {
 				findMessages = messageCenterRepository.findBySenderUsernameOrRecipientUsername(user.getUsername(), user.getUsername());
 			}
