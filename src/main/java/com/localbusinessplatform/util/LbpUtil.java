@@ -31,7 +31,16 @@ public class LbpUtil {
 			ObjectMapper mapper = new ObjectMapper();
 			GoogleResponse googleResponse = mapper.readValue(response.body().string(), GoogleResponse .class);
 			
-			return googleResponse.getRows().get(0).getElements().get(0).getDistance().getText().replaceAll(" mi", "");
+			String extractDistance = googleResponse.getRows().get(0).getElements().get(0).getDistance().getText();
+			
+			String newDistance = "0";
+			if (extractDistance.contains("mi")) {
+				newDistance = extractDistance.replaceAll(" mi", "");
+			} else {
+				newDistance = "0"; //for any units besides miles
+			}
+			
+			return newDistance;
 	}
 	
 	public void sortArrayList(List<Orderx> order){

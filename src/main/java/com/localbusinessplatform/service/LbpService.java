@@ -116,8 +116,13 @@ public class LbpService {
 	}
 
 	public String updateProfile(User user) {
-		User finduser = userRepository.findById(user.getId());
-		if (finduser != null) { //finduser.isPresent()
+		User findUser = userRepository.findById(user.getId());
+		if (findUser != null) { //finduser.isPresent()
+			Store findStore = storeRepository.findByUserId(findUser.getId());
+			if (user.getUsertype().equals("buyer") && findStore != null) {
+				findStore.setPublish(false);
+				storeRepository.save(findStore);
+			}
 			userRepository.save(user);
 			// existing user
 		} else {
