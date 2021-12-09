@@ -119,7 +119,7 @@ public class LbpService {
 		User findUser = userRepository.findById(user.getId());
 		if (findUser != null) { //finduser.isPresent()
 			Store findStore = storeRepository.findByUserId(findUser.getId());
-			if (user.getUsertype().equals("buyer") && findStore != null) {
+			if (user.getUsertype().equals("buyer") && findStore != null) { //if the user is a buyer then no need to publish the store 
 				findStore.setPublish(false);
 				storeRepository.save(findStore);
 			}

@@ -16,7 +16,7 @@ public interface ItemRepository extends JpaRepository<Item, Long>{
 	
 	Item findByItemId(long item_id);
 	
-	@Query(value = "SELECT * FROM item where item_name like CONCAT('%', :itemName,'%') or description like CONCAT('%', :description,'%') AND category= :category", nativeQuery = true)
+	@Query(value = "SELECT * FROM item where (item_name like CONCAT('%', :itemName,'%') or description like CONCAT('%', :description,'%')) AND category= :category", nativeQuery = true)
 	List<Item> findByItemNameOrDescriptionAndCategoryContains(@Param("itemName") String itemName,@Param("description") String description,@Param("category") String category);
 	
 	List<Item> findByItemNameOrDescriptionContains(String itemName, String desciption);
