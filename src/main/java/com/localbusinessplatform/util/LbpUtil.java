@@ -23,7 +23,7 @@ public class LbpUtil {
 	public String calculateDistance(String origin, String destination) throws IOException {
 		OkHttpClient client = new OkHttpClient().newBuilder().build();
         Request request = new Request.Builder()
-            .url("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + origin +"&destinations=" + destination+ "&units=imperial&key=AIzaSyAgVg1ZT-SpZ1GZma4SWjM7TlBz3kWVozg")
+            .url("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + origin +"&destinations=" + destination+ "&units=imperial&key=<enter_key_here>")
             .method("GET", null)
             .build();
 
